@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+subprojects {
+
+    group 'az.mm.delivery'
+    version '0.0.1'
+    sourceCompatibility = '11'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://repo.spring.io/milestone' }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'checkstyle'
+    apply plugin: 'jacoco'
+
+    checkstyle {
+        toolVersion '8.23'
+    }
+
+    jacoco {
+        toolVersion = "0.8.6"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

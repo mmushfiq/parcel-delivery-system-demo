@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="001_initial_schema" author="Mushfiq Mammadov">
+
+        <!--    CREATE Users TABLE    -->
+        <createTable tableName="users">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar2(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="current_timestamp"/>
+        </createTable>
+
+        <!--    CREATE Roles TABLE    -->
+        <createTable tableName="roles">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="current_timestamp"/>
+        </createTable>
+
+        <!--    CREATE Permissions TABLE    -->
+        <createTable tableName="permissions">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="current_timestamp"/>
+        </createTable>
+
+        <!--    CREATE Users_Roles TABLE    -->
+        <createTable tableName="users_roles">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"
+                             referencedTableName="users"
+                             referencedColumnNames="id"
+                             foreignKeyName="users_roles_fk1"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"
+                             referencedTableName="roles"
+                             referencedColumnNames="id"
+                             foreignKeyName="users_roles_fk2"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="user_id, role_id" tableName="users_roles"/>
+
+        <!--    CREATE Roles_Permissions TABLE    -->
+        <createTable tableName="roles_permissions">
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"
+                             referencedTableName="roles"
+                             referencedColumnNames="id"
+                             foreignKeyName="roles_permissions_fk1"/>
+            </column>
+            <column name="permission_id" type="bigint">
+                <constraints nullable="false"
+                             referencedTableName="permissions"
+                             referencedColumnNames="id"
+                             foreignKeyName="roles_permissions_fk2"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="role_id, permission_id" tableName="roles_permissions"/>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,33 @@
+name;description
+view_user;Can view user
+add_user;Can add new user
+update_user;Can update user
+delete_user;Can delete user
+view_role;Can view roles
+add_role;Can add new role
+update_role;Can update role
+delete_role;Can delete role
+view_permission;Can view permissions
+add_permission;Can add new permission
+update_permission;Can update permission
+delete_permission;Can delete permission
+create_courier;Can create courier account
+view_courier;Can view courier list or details
+view_parcel;Can view parcel list or details
+update_parcel;Can update parcel
+change_parcel_status;Can change parcel status
+receive_parcel;Can receive parcel by courier
+track_parcel;Can track parcel
+complete_parcel_order;Can complete parcel order
+view_order;Can view order list or details
+create_order;Can create order
+update_order;Can update order
+change_order_destination;Can change order destination
+cancel_order;Can cancel parcel order
+accept_order;Can accept order
+change_order_status;Can change order status
+assign_courier;Can assign courier
+view_user_list;Can view user list
+
+
+

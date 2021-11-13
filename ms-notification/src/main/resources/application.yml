@@ -1,0 +1,29 @@
+server:
+  port: 8084
+
+spring:
+  mail:
+    host: "smtp.gmail.com"
+    port: 587
+    username: "parcel.delivery.sys@gmail.com"
+    password: "t1t2t3t4!"
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+    protocol: "smtp"
+    templates:
+      path: templates
+  cloud:
+    stream:
+      function:
+        definition: receiveEmailNotificationEvent
+      kafka:
+        binder:
+          brokers: localhost:29092
+      bindings:
+        receiveEmailNotificationEvent-in-0:
+          destination: email-notification
+
+application:
+  email:
+    from: "parcel.delivery.sys@gmail.com"

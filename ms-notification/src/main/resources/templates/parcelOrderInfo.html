@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Parcel Delivery System</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            .datagrid table {
+                border-collapse: collapse!important;
+                text-align: left!important;
+                width: 100%!important;
+            }
+
+            .datagrid {
+                font: normal 14px/150% Arial, Helvetica, sans-serif!important;
+                background: #fff!important;
+                overflow: hidden!important;
+                border: 1px solid #006699!important;
+                -webkit-border-radius: 3px!important;
+                -moz-border-radius: 3px!important;
+                border-radius: 3px!important;
+                width: 50%!important;
+                margin: 0 auto!important;
+            }
+
+            .datagrid table td,
+            .datagrid table th {
+                padding: 3px 10px!important;
+            }
+
+            .datagrid table thead th {
+                background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F))!important;
+                background: -moz-linear-gradient( center top, #006699 5%, #00557F 100%)!important;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F')!important;
+                background-color: #006699!important;
+                color: #FFFFFF!important;
+                font-size: 16px!important;
+                font-weight: bold!important;
+            }
+
+            .datagrid table thead th:first-child {
+                border: none!important;
+            }
+
+            .datagrid table tbody td {
+                color: #00496B!important;
+                border-left: 1px solid #E1EEF4!important;
+                font-size: 14px!important;
+                font-weight: normal!important;
+            }
+
+            .datagrid table tbody .alt td {
+                background: #E1EEF4!important;
+                color: #00496B!important;
+            }
+
+            .datagrid table tbody td:first-child {
+                border-left: none!important;
+            }
+
+            .datagrid table tbody tr:last-child td {
+                border-bottom: none!important;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="delivery-logo.png" th:src="${imageResourceName}" />
+        <p th:text="${event.message}">data</p>
+        <div class="datagrid">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">Parcel Order Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Order Number</td>
+                        <td th:text="${event.orderNumber}">data</td>
+                    </tr>
+                    <tr class="alt">
+                        <td>Name</td>
+                        <td th:text="${event.name}">data</td>
+                    </tr>
+                    <tr>
+                        <td>Destination</td>
+                        <td th:text="${event.destination}">data</td>
+                    </tr>
+                    <tr class="alt">
+                        <td>Status</td>
+                        <td th:text="${event.status}">data</td>
+                    </tr>
+                    <tr>
+                        <td>Weight</td>
+                        <td th:text="${event.weight}">data</td>
+                    </tr>
+                    <tr class="alt">
+                        <td>Amount</td>
+                        <td th:text="${event.amount}">data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

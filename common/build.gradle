@@ -1,0 +1,35 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.12'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.sonarqube' version '3.0'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.springframework.boot:spring-boot-starter-security'
+    compileOnly 'org.springframework.boot:spring-boot-starter-aop'
+    compileOnly 'org.springframework.boot:spring-boot-starter-validation'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly "io.springfox:springfox-boot-starter:${springfox_starter_version}"
+    compileOnly "net.logstash.logback:logstash-logback-encoder:${logstash_logback_version}"
+    compileOnly "org.apache.commons:commons-lang3:${apache_commons_version}"
+    compileOnly "io.jsonwebtoken:jjwt-api:${jwt_version}"
+    compileOnly "io.jsonwebtoken:jjwt-impl:${jwt_version}"
+    compileOnly "io.jsonwebtoken:jjwt-jackson:${jwt_version}"
+}

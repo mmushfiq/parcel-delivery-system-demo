@@ -1,0 +1,67 @@
+server:
+  port: 8083
+
+logging:
+  level:
+    ROOT: INFO
+    az.mm.delivery: DEBUG
+
+spring:
+  application:
+    name: ms-delivery
+  liquibase:
+    change-log: classpath:db/changelog-master.xml
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5435/delivery_parcel
+    username: delivery
+    password: delivery123
+    hikari:
+      poolName: MsDeliveryHikariPool
+      auto-commit: false
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.format_sql: true
+  cloud:
+    stream:
+      source: sendOrderStatusChangeEvent
+      function:
+        definition: receiveParcelOrderEvent
+      kafka:
+        binder:
+          brokers: localhost:29092
+      bindings:
+        sendOrderStatusChangeEvent-out-0:
+          destination: parcel-order-status-change
+        receiveParcelOrderEvent-in-0:
+          destination: parcel-order
+
+application:
+  swagger:
+    enabled: true
+    base-package: "az.mm.delivery.parcel.controller"
+    paths: "/.*"
+    apiInfo:
+      version: 1.0
+      title: "Ms-Delivery Rest API"
+      description: "Spring Boot REST API for Ms-Delivery"
+  security:
+    authentication:
+      jwt:
+        base64-secret: V2pOV2FHUnRSbmRaV0d4M1dWaEthbHBYZUd0YVYzaHdaRzFXZVdWWVRqVmpNMUpzWWxkR2QyTklUbXhaTTBwc1pFZDBiR1ZWUW10YVdGbHE=
+  filter:
+    logging:
+      skipped-urls: /actuator/health, /v2/api-docs/**, /v3/api-docs/**, /swagger-resources/**, /webjars/**, /favicon.ico
+

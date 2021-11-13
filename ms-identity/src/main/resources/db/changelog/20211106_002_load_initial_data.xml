@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="002_load_initial_data" author="Mushfiq Mammadov">
+
+        <!--    load users data    -->
+        <loadData
+                file="db/data/users.csv"
+                separator=";"
+                tableName="users">
+        </loadData>
+
+        <!--    load roles data    -->
+        <loadData
+                file="db/data/roles.csv"
+                separator=";"
+                tableName="roles">
+        </loadData>
+
+        <!--    load permissions data    -->
+        <loadData
+                file="db/data/permissions.csv"
+                separator=";"
+                tableName="permissions">
+        </loadData>
+
+        <!--    load users_roles data    -->
+        <loadData
+                file="db/data/users_roles.csv"
+                separator=";"
+                tableName="users_roles">
+        </loadData>
+
+        <!--    load roles_permissions data    -->
+        <loadData
+                file="db/data/roles_permissions.csv"
+                separator=";"
+                tableName="roles_permissions">
+        </loadData>
+
+    </changeSet>
+
+</databaseChangeLog>

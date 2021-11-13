@@ -1,0 +1,62 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    ROOT: INFO
+    az.mm.delivery: DEBUG
+
+spring:
+  application:
+    name: ms-identity
+  liquibase:
+    change-log: classpath:db/changelog-master.xml
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/delivery_identity
+    username: identity
+    password: identity123
+    hikari:
+      poolName: MsIdentityHikariPool
+      auto-commit: false
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.format_sql: true
+
+application:
+  swagger:
+    enabled: true
+    base-package: "az.mm.delivery.identity.controller"
+    paths: "/.*"
+    apiInfo:
+      version: 1.0
+      title: "Ms-Idenity Rest API"
+      description: "Spring Boot REST API for Ms-Identity"
+  security:
+    authentication:
+      jwt:
+        base64-secret: V2pOV2FHUnRSbmRaV0d4M1dWaEthbHBYZUd0YVYzaHdaRzFXZVdWWVRqVmpNMUpzWWxkR2QyTklUbXhaTTBwc1pFZDBiR1ZWUW10YVdGbHE=
+        access-token-validity-in-seconds: 900
+        refresh-token-validity-in-seconds: 3600
+  redis:
+    address: redis://localhost:6379
+    connection-pool-size: 4
+    connection-minimum-idle-size: 2
+    prefix: delivery
+    token-prefix: delivery:token
+    token-time-to-live: 3600   # same value as jwt refresh-token-validity value
+  filter:
+    logging:
+      skipped-urls: /actuator/health, /v2/api-docs/**, /v3/api-docs/**, /swagger-resources/**, /webjars/**, /favicon.ico

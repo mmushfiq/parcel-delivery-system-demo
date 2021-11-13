@@ -1,0 +1,9 @@
+rootProject.name = 'parcel-delivery-system'
+
+include 'api-gateway'
+include 'ms-identity'
+include 'ms-order'
+include 'ms-delivery'
+include 'ms-notification'
+include 'common'
+

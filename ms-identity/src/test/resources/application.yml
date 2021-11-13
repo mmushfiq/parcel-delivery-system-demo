@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: ms-identity
+  liquibase:
+    change-log: classpath:db/changelog-master.xml
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:ms-identity;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: ms-identity
+    password:
+    hikari:
+      poolName: MsIdentityHikariPool
+      auto-commit: false
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database: H2
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.format_sql: true
+
+application:
+  security:
+    authentication:
+      jwt:
+        base64-secret: ZEdocGN5MXBjeTEwWlhOMExYTmxZM0psZEMxclpYa3RabTl5TFhCaGNtTmxiQzFrWld4cGRtVnllUzF6ZVhOMFpXMD0=
+        access-token-validity-in-seconds: 900
+        refresh-token-validity-in-seconds: 3600
+  redis:
+    address: redis://localhost:6379
+    connection-pool-size: 4
+    connection-minimum-idle-size: 2
+    prefix: delivery
+    token-prefix: delivery:token
+    token-time-to-live: 3600   # same value as jwt refresh-token-validity value
