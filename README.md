@@ -3,6 +3,12 @@
 ![Travis (.org)](https://img.shields.io/travis/isopropylcyanide/Jwt-Spring-Security-JPA)
 ![GitHub](https://img.shields.io/github/license/isopropylcyanide/Jwt-Spring-Security-JPA?color=blue)
 
+
+## API Gateway ##
+- Netflix Zuul      - `git checkout master`
+- KONG API gateway  - `git checkout kong-api-gateway`
+
+
 ## Getting Started ##
 
 - `start.sh` - start app
