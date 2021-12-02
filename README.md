@@ -3,11 +3,47 @@
 ![Travis (.org)](https://img.shields.io/travis/isopropylcyanide/Jwt-Spring-Security-JPA)
 ![GitHub](https://img.shields.io/github/license/isopropylcyanide/Jwt-Spring-Security-JPA?color=blue)
 
+
+## API Gateway ##
+- Netflix Zuul      - `git checkout master`
+- KONG API gateway  - `git checkout kong-api-gateway`
+
+
 ## Getting Started ##
 
 - `start.sh` - start app
 - `stop.sh`  - stop app
 - `http://localhost:9000/` - Kafdrop (Kafka UI)
+
+
+## Config KONG API Gateway ##
+
+- `http://localhost:1337` - Kong UI (konga)
+
+### Open Konga and register:
+![konga-register](https://user-images.githubusercontent.com/6951427/144405600-f1979e3e-88f0-47c1-91ad-c4e57d8cc109.jpg)
+
+### Create connection:
+![konga-create-connection](https://user-images.githubusercontent.com/6951427/144406049-82a30e0c-2ba8-4f16-ad1c-f9004f2bd1fb.jpg)
+
+### Import `pds-kong-admin-snapshot.json` file:
+![konga-import-snapshot](https://user-images.githubusercontent.com/6951427/144407884-3798f42c-b8ef-4fbf-9bd6-79b02a24ef74.jpg)
+
+### Click **DETAILS** then **RESTORE**:
+![konga-restore-snapshot](https://user-images.githubusercontent.com/6951427/144408909-c46b26ef-f0d5-4468-b5e2-57435cb6cc12.jpg)
+
+### Services:
+![konga-services](https://user-images.githubusercontent.com/6951427/144409323-fa3a6ead-d911-4f62-b2bf-7649c5187720.jpg)
+
+### Routes:
+![konga-routes](https://user-images.githubusercontent.com/6951427/144409475-de1eebe2-4878-4517-978f-ec034149d96b.jpg)
+
+### Upstreams:
+![konga-upstreams](https://user-images.githubusercontent.com/6951427/144409563-24f77876-a087-4010-a8a8-356987749274.jpg)
+
+### Plugins:
+![konga-plugins](https://user-images.githubusercontent.com/6951427/144409648-22027865-aaac-4ba2-ae8b-d6a1f3f7f38d.jpg)
+
 
 
 ## Architecture ##
@@ -16,7 +52,7 @@
 
 ## Swagger Docs: ##
 ```
-http://localhost:8080/ or http://localhost:8080/swagger-ui/
+http://localhost:8000/swagger-ui/
 ```
 
 ### Ms-Identity Rest API ###
@@ -39,7 +75,7 @@ http://localhost:8080/ or http://localhost:8080/swagger-ui/
 <summary>Can create an user account</summary>
 
 ```
-curl --location --request POST 'http://localhost:8080/identity/auth/signup' \
+curl --location --request POST 'http://localhost:8000/identity/auth/signup' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "username": "mushfiqazeri@mail.ru"
@@ -57,7 +93,7 @@ curl --location --request POST 'http://localhost:8080/identity/auth/signup' \
 <summary>Can log in as user</summary>
 
 ```
-curl --location --request POST 'http://localhost:8080/identity/auth/signin' \
+curl --location --request POST 'http://localhost:8000/identity/auth/signin' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "username": "mushfiqazeri@mail.ru"
@@ -78,7 +114,7 @@ Response:
 <summary>Can create a parcel delivery order</summary>
 
 ```
-curl --location --request POST 'http://localhost:8080/order/api/orders' \
+curl --location --request POST 'http://localhost:8000/order/api/orders' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {jwt}' \
 --data-raw '{
@@ -111,7 +147,7 @@ Response:
 <summary>Can change the destination of a parcel delivery order</summary>
 
 ```
-curl --location --request PUT 'http://localhost:8080/order/api/orders/change-destination' \
+curl --location --request PUT 'http://localhost:8000/order/api/orders/change-destination' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {jwt}' \
 --data-raw '{
@@ -143,7 +179,7 @@ Response:
 <summary>Can cancel a parcel delivery order</summary>
 
 ```
-curl --location --request PUT 'http://localhost:8080/order/api/orders/cancel/2' \
+curl --location --request PUT 'http://localhost:8000/order/api/orders/cancel/2' \
 --header 'Authorization: Bearer {jwt}'
 ```
 </details>
@@ -154,7 +190,7 @@ curl --location --request PUT 'http://localhost:8080/order/api/orders/cancel/2' 
 <summary>Can see the details of a delivery</summary>
 
 ```
-GET http://localhost:8080/order/api/orders/1
+GET http://localhost:8000/order/api/orders/1
 
 Response:
 {
@@ -180,7 +216,7 @@ Response:
 <summary>Can see all parcel delivery orders that he/she created</summary>
 
 ```
-curl --location --request GET 'http://localhost:8080/order/api/orders' \
+curl --location --request GET 'http://localhost:8000/order/api/orders' \
 --header 'Authorization: Bearer {jwt}'
 
 Response:
@@ -226,7 +262,7 @@ Response:
 <summary>Login as admin</summary>
 
 ```
-curl --location --request POST 'http://localhost:8080/identity/auth/signin' \
+curl --location --request POST 'http://localhost:8000/identity/auth/signin' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {jwt}' \
 --data-raw '{
@@ -248,7 +284,7 @@ Response:
 <summary>Can change the status of a parcel delivery order</summary>
 
 ```
-curl --location --request PUT 'http://localhost:8080/order/api/orders/change-status' \
+curl --location --request PUT 'http://localhost:8000/order/api/orders/change-status' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {jwt}' \
 --data-raw '{
@@ -280,7 +316,7 @@ Response:
 <summary>Can view all parcel delivery orders</summary>
 
 ```
-curl --location --request GET 'http://localhost:8080/order/api/orders' \
+curl --location --request GET 'http://localhost:8000/order/api/orders' \
 --header 'Authorization: Bearer {jwt}'
 
 Response:
@@ -323,7 +359,7 @@ Response:
 <summary>Accept order and determine some details (parcel weight, delivery amount etc)</summary>
 
 ```
-curl --location --request PUT 'http://localhost:8080/order/api/orders/accept/2' \
+curl --location --request PUT 'http://localhost:8000/order/api/orders/accept/2' \
 --header 'Authorization: Bearer {jwt}'
 
 {
@@ -349,7 +385,7 @@ curl --location --request PUT 'http://localhost:8080/order/api/orders/accept/2' 
 <summary>Create a courier account</summary>
 
 ```
-curl --location --request POST 'http://localhost:8080/identity/auth/signup/courier' \
+curl --location --request POST 'http://localhost:8000/identity/auth/signup/courier' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {jwt}' \
 --data-raw '{
@@ -368,7 +404,7 @@ curl --location --request POST 'http://localhost:8080/identity/auth/signup/couri
 <summary>Can assign parcel delivery order to courier</summary>
 
 ```
-curl --location --request PUT 'http://localhost:8080/order/api/orders/assign-courier' \
+curl --location --request PUT 'http://localhost:8000/order/api/orders/assign-courier' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {jwt}' \
 --data-raw '{
@@ -400,7 +436,7 @@ Response:
 <summary>Can track the delivery order by coordinates</summary>
 
 ```
-curl --location --request GET 'http://localhost:8080/delivery/api/parcels/track/2' \
+curl --location --request GET 'http://localhost:8000/delivery/api/parcels/track/2' \
 --header 'Authorization: Bearer {jwt}'
 
 Response:
@@ -414,7 +450,7 @@ Response:
 <summary>Can see list of couriers with their statuses</summary>
 
 ```
-curl --location --request GET 'http://localhost:8080/identity/api/users/couriers' \
+curl --location --request GET 'http://localhost:8000/identity/api/users/couriers' \
 --header 'Authorization: Bearer {jwt}'
 
 Response:
@@ -449,7 +485,7 @@ Response:
 <summary>Can log in</summary>
 
 ```
-curl --location --request POST 'http://localhost:8080/identity/auth/signin' \
+curl --location --request POST 'http://localhost:8000/identity/auth/signin' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {jwt}' \
 --data-raw '{
@@ -471,7 +507,7 @@ Response:
 <summary>Can view all parcel delivery orders that assigned to him</summary>
 
 ```
-curl --location --request GET 'http://localhost:8080/delivery/api/parcels' \
+curl --location --request GET 'http://localhost:8000/delivery/api/parcels' \
 --header 'Authorization: Bearer {jwt}'
 
 Response:
@@ -506,7 +542,7 @@ Response:
 <summary>Can see the details of a delivery order</summary>
 
 ```
-curl --location --request GET 'http://localhost:8080/delivery/api/parcels/2' \
+curl --location --request GET 'http://localhost:8000/delivery/api/parcels/2' \
 --header 'Authorization: Bearer {jwt}'
 
 Response:
@@ -529,7 +565,7 @@ Response:
 <summary>Receive parcel order by courier (Status change from PENDING to IN_PROGRESS)</summary>
 
 ```
-curl --location --request PUT 'http://localhost:8080/delivery/api/parcels/receive-parcel/2' \
+curl --location --request PUT 'http://localhost:8000/delivery/api/parcels/receive-parcel/2' \
 --header 'Authorization: Bearer {jwt}'
 
 Response:
@@ -552,7 +588,7 @@ Response:
 <summary>Parcel order is completed by courier (Status change from IN_PROGRESS to DELIVERED)</summary>
 
 ```
-curl --location --request PUT 'http://localhost:8080/delivery/api/parcels/complete-order/2' \
+curl --location --request PUT 'http://localhost:8000/delivery/api/parcels/complete-order/2' \
 --header 'Authorization: Bearer {jwt}'
 
 {

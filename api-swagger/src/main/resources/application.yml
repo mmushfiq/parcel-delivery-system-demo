@@ -1,0 +1,27 @@
+server:
+  port: 9090
+
+logging:
+  level:
+    ROOT: INFO
+    az.mm.delivery: DEBUG
+
+spring:
+  application:
+    name: api-swagger
+
+application:
+  swagger:
+    base-url: http://localhost:8000
+    docs-url: v2/api-docs
+    version: 3.0.0
+    definitions:
+      - name: ms-identity
+        url: /identity/v2/api-docs
+        version: ${application.swagger.version}
+      - name: ms-order
+        url: /order/v2/api-docs
+        version: ${application.swagger.version}
+      - name: ms-delivery
+        url: /delivery/v2/api-docs
+        version: ${application.swagger.version}

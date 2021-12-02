@@ -1,8 +1,8 @@
-package az.mm.delivery.gateway.config;
+package az.mm.delivery.swagger.config;
 
+import az.mm.delivery.swagger.config.properties.SwaggerProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 import static org.springframework.web.servlet.function.RequestPredicates.GET;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
-@Slf4j
 public class SwaggerConfig {
 
-    private final RouteLocator routeLocator;
+    private final SwaggerProperties swaggerProperties;
 
     @Bean
     public Docket docket() {
@@ -56,11 +56,11 @@ public class SwaggerConfig {
                 .build();
     }
 
-    @Bean
-    public RouterFunction<ServerResponse> routerFunction() {
-        return route(GET("/").or(GET("/swagger*")), req ->
-                ServerResponse.temporaryRedirect(URI.create("swagger-ui/")).build());
-    }
+//    @Bean
+//    public RouterFunction<ServerResponse> routerFunction() {
+//        return route(GET("/").or(GET("/swagger*")), req ->
+//                ServerResponse.temporaryRedirect(URI.create("swagger-ui/")).build());
+//    }
 
     @Primary
     @Bean
@@ -69,11 +69,13 @@ public class SwaggerConfig {
     }
 
     private List<SwaggerResource> swaggerResources() {
-        return routeLocator.getRoutes().stream().map(route -> {
+        return swaggerProperties.getDefinitions().stream().map(definition -> {
             var resource = new SwaggerResource();
-            resource.setName(route.getId());
-            resource.setLocation(route.getFullPath().replace("**", "v2/api-docs"));
-            resource.setSwaggerVersion(DocumentationType.OAS_30.getVersion());
+            resource.setName(definition.getName());
+            resource.setLocation(definition.getUrl());
+            resource.setSwaggerVersion(definition.getVersion());
+            log.info("definition name: {}, url: {}", definition.getName(), definition.getUrl());
+            log.info("swagger location: {}", resource.getUrl());
             return resource;
         }).collect(Collectors.toList());
     }

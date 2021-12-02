@@ -1,6 +1,6 @@
 rootProject.name = 'parcel-delivery-system'
 
-include 'api-gateway'
+include 'api-swagger'
 include 'ms-identity'
 include 'ms-order'
 include 'ms-delivery'
