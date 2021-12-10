@@ -2,13 +2,13 @@ package az.mm.delivery.gateway.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
+import org.springframework.cloud.gateway.config.GatewayProperties;
+import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.StopWatch;
-import org.springframework.web.servlet.function.RouterFunction;
-import org.springframework.web.servlet.function.ServerResponse;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -18,19 +18,16 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.springframework.web.servlet.function.RequestPredicates.GET;
-import static org.springframework.web.servlet.function.RouterFunctions.route;
 
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class SwaggerConfig {
 
-    private final RouteLocator routeLocator;
+    private final GatewayProperties gatewayProperties;
 
     @Bean
     public Docket docket() {
@@ -56,26 +53,28 @@ public class SwaggerConfig {
                 .build();
     }
 
-    @Bean
-    public RouterFunction<ServerResponse> routerFunction() {
-        return route(GET("/").or(GET("/swagger*")), req ->
-                ServerResponse.temporaryRedirect(URI.create("swagger-ui/")).build());
-    }
-
     @Primary
     @Bean
-    public SwaggerResourcesProvider swaggerResourceProvider() {
+    @Lazy
+    public SwaggerResourcesProvider swaggerResourcesProvider() {
         return this::swaggerResources;
     }
 
     private List<SwaggerResource> swaggerResources() {
-        return routeLocator.getRoutes().stream().map(route -> {
+        return gatewayProperties.getRoutes().stream().map(route -> {
             var resource = new SwaggerResource();
             resource.setName(route.getId());
-            resource.setLocation(route.getFullPath().replace("**", "v2/api-docs"));
+            resource.setLocation(getRouteLocation(route));
             resource.setSwaggerVersion(DocumentationType.OAS_30.getVersion());
             return resource;
         }).collect(Collectors.toList());
+    }
+
+    private String getRouteLocation(RouteDefinition route) {
+        return Optional.ofNullable(route.getPredicates().get(0).getArgs().values().toArray()[0])
+                .map(String::valueOf)
+                .map(s -> s.replace("**", "v2/api-docs"))
+                .orElse(null);
     }
 
 }

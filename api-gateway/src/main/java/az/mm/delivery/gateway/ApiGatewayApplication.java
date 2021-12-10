@@ -1,27 +1,53 @@
 package az.mm.delivery.gateway;
 
-import az.mm.delivery.common.filter.JwtTokenFilter;
-import az.mm.delivery.common.security.TokenProvider;
-import az.mm.delivery.common.util.LogUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.core.env.Environment;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @SpringBootApplication
-@EnableZuulProxy
-@ComponentScan(basePackages = {"az.mm.delivery"},
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-                value = {TokenProvider.class, JwtTokenFilter.class})
-        })
+@Slf4j
 public class ApiGatewayApplication {
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ApiGatewayApplication.class);
         Environment env = app.run(args).getEnvironment();
-        LogUtil.logApplicationStartup(env);
+        logApplicationStartup(env);
+    }
+
+    public static void logApplicationStartup(Environment env) {
+        String protocol = "http";
+        if (env.getProperty("server.ssl.key-store") != null) {
+            protocol = "https";
+        }
+        String serverPort = env.getProperty("server.port");
+        String contextPath = env.getProperty("server.servlet.context-path");
+        if (contextPath == null || contextPath.isBlank()) {
+            contextPath = "/";
+        }
+        String hostAddress = "localhost";
+        try {
+            hostAddress = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            log.warn("The host name could not be determined, using `localhost` as fallback");
+        }
+        log.info("\n----------------------------------------------------------\n\t" +
+                        "Application '{}' is running! Access URLs:\n\t" +
+                        "Local: \t\t{}://localhost:{}{}\n\t" +
+                        "External: \t{}://{}:{}{}\n\t" +
+                        "Profile(s): \t{}\n----------------------------------------------------------",
+                env.getProperty("spring.application.name"),
+                protocol,
+                serverPort,
+                contextPath,
+                protocol,
+                hostAddress,
+                serverPort,
+                contextPath,
+                env.getActiveProfiles());
     }
 
 }

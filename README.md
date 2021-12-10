@@ -7,6 +7,7 @@
 ## API Gateway ##
 - Netflix Zuul      - `git checkout master`
 - KONG API gateway  - `git checkout kong-api-gateway`
+- Spring Cloud Gateway  - `git checkout spring-cloud-gateway`
 
 
 ## Getting Started ##
@@ -22,7 +23,7 @@
 
 ## Swagger Docs: ##
 ```
-http://localhost:8080/ or http://localhost:8080/swagger-ui/
+http://localhost:8080/swagger-ui/
 ```
 
 ### Ms-Identity Rest API ###

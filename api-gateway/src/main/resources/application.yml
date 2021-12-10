@@ -9,20 +9,27 @@ logging:
 spring:
   application:
     name: api-gateway
-
-zuul:
-  sensitive-headers: Cookie,Set-Cookie
-  ignoredServices: '*'
-  routes:
-    ms-identity:
-      path: /identity/**
-      url: http://localhost:8081
-    ms-order:
-      path: /order/**
-      url: http://localhost:8082
-    ms-delivery:
-      path: /delivery/**
-      url: http://localhost:8083
+  cloud:
+    gateway:
+      routes:
+        - id: ms-identity
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/identity/**
+          filters:
+            - StripPrefix=1
+        - id: ms-order
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1
+        - id: ms-delivery
+          uri: http://localhost:8083/
+          predicates:
+            - Path=/delivery/**
+          filters:
+            - StripPrefix=1
 
 management:
   endpoints:
@@ -40,9 +47,3 @@ application:
       - PUT
       - DELETE
       - OPTIONS
-  filter:
-    logging:
-      skipped-urls: /actuator/health, /v2/api-docs/**, /v3/api-docs/**, /swagger-resources/**, /webjars/**, /favicon.ico
-
-
-

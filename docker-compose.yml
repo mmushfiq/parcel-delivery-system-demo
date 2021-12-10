@@ -1,36 +1,6 @@
 version: '3.3'
 services:
 
-  db_identity:
-    container_name: pds_delivery_identity_db
-    image: postgres
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_USER: identity
-      POSTGRES_PASSWORD: identity123
-      POSTGRES_DB: delivery_identity
-
-  db_order:
-    container_name: pds_delivery_order_db
-    image: postgres
-    ports:
-      - "5434:5432"
-    environment:
-      POSTGRES_USER: order
-      POSTGRES_PASSWORD: order123
-      POSTGRES_DB: delivery_order
-
-  db_delivery:
-    container_name: pds_delivery_parcel_db
-    image: postgres
-    ports:
-      - "5435:5432"
-    environment:
-      POSTGRES_USER: delivery
-      POSTGRES_PASSWORD: delivery123
-      POSTGRES_DB: delivery_parcel
-
   redis:
     container_name: pds_redis
     image: "redis:alpine"
@@ -76,78 +46,108 @@ services:
       ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKERCONNECT: kafka:9092
 
-  api-gateway:
-    container_name: pds_api-gateway
-    image: pds/api-gateway:1.0
+  db_identity:
+    container_name: pds_delivery_identity_db
+    image: postgres
     ports:
-      - "127.0.0.1:8080:8080"
-    restart: unless-stopped
-    build:
-      context: api-gateway
-      dockerfile: Dockerfile
+      - "5433:5432"
     environment:
-      ZUUL_ROUTES_MS-IDENTITY_URL: http://ms-identity:8081
-      ZUUL_ROUTES_MS-ORDER_URL: http://ms-order:8082
-      ZUUL_ROUTES_MS-DELIVERY_URL: http://ms-delivery:8083
+      POSTGRES_USER: identity
+      POSTGRES_PASSWORD: identity123
+      POSTGRES_DB: delivery_identity
 
-  ms-identity:
-    container_name: pds_ms-identity
-    image: pds/ms-identity:1.0
+  db_order:
+    container_name: pds_delivery_order_db
+    image: postgres
     ports:
-      - "127.0.0.1:8081:8081"
-    restart: unless-stopped
-    build:
-      context: ms-identity
-      dockerfile: Dockerfile
-    depends_on:
-      - db_identity
-      - redis
+      - "5434:5432"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db_identity:5432/delivery_identity
-      APPLICATION_REDIS_ADDRESS: redis://redis:6379
+      POSTGRES_USER: order
+      POSTGRES_PASSWORD: order123
+      POSTGRES_DB: delivery_order
 
-  ms-order:
-    container_name: pds_ms-order
-    image: pds/ms-order:1.0
+  db_delivery:
+    container_name: pds_delivery_parcel_db
+    image: postgres
     ports:
-      - "127.0.0.1:8082:8082"
-    restart: unless-stopped
-    build:
-      context: ms-order
-      dockerfile: Dockerfile
-    depends_on:
-      - db_order
-      - kafka
+      - "5435:5432"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db_order:5432/delivery_order
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+      POSTGRES_USER: delivery
+      POSTGRES_PASSWORD: delivery123
+      POSTGRES_DB: delivery_parcel
 
-  ms-delivery:
-    container_name: pds_ms-delivery
-    image: pds/ms-delivery:1.0
-    ports:
-      - "127.0.0.1:8083:8083"
-    restart: unless-stopped
-    build:
-      context: ms-delivery
-      dockerfile: Dockerfile
-    depends_on:
-      - db_delivery
-      - kafka
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db_delivery:5432/delivery_parcel
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
-
-  ms-notification:
-    container_name: pds_ms-notification
-    image: pds/ms-notification:1.0
-    ports:
-      - "127.0.0.1:8084:8084"
-    restart: unless-stopped
-    build:
-      context: ms-notification
-      dockerfile: Dockerfile
-    depends_on:
-      - kafka
-    environment:
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+#  api-gateway:
+#    container_name: pds_api-gateway
+#    image: pds/api-gateway:1.0
+#    ports:
+#      - "8080:8080"
+#    restart: unless-stopped
+#    build:
+#      context: api-gateway
+#      dockerfile: Dockerfile
+#    environment:
+#      ZUUL_ROUTES_MS-IDENTITY_URL: http://ms-identity:8081
+#      ZUUL_ROUTES_MS-ORDER_URL: http://ms-order:8082
+#      ZUUL_ROUTES_MS-DELIVERY_URL: http://ms-delivery:8083
+#
+#  ms-identity:
+#    container_name: pds_ms-identity
+#    image: pds/ms-identity:1.0
+#    ports:
+#      - "8081:8081"
+#    restart: unless-stopped
+#    build:
+#      context: ms-identity
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - db_identity
+#      - redis
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db_identity:5432/delivery_identity
+#      APPLICATION_REDIS_ADDRESS: redis://redis:6379
+#
+#  ms-order:
+#    container_name: pds_ms-order
+#    image: pds/ms-order:1.0
+#    ports:
+#      - "8082:8082"
+#    restart: unless-stopped
+#    build:
+#      context: ms-order
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - db_order
+#      - kafka
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db_order:5432/delivery_order
+#      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+#
+#  ms-delivery:
+#    container_name: pds_ms-delivery
+#    image: pds/ms-delivery:1.0
+#    ports:
+#      - "8083:8083"
+#    restart: unless-stopped
+#    build:
+#      context: ms-delivery
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - db_delivery
+#      - kafka
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db_delivery:5432/delivery_parcel
+#      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+#
+#  ms-notification:
+#    container_name: pds_ms-notification
+#    image: pds/ms-notification:1.0
+#    ports:
+#      - "8084:8084"
+#    restart: unless-stopped
+#    build:
+#      context: ms-notification
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - kafka
+#    environment:
+#      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
