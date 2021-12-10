@@ -7,6 +7,7 @@
 ## API Gateway ##
 - Netflix Zuul      - `git checkout master`
 - KONG API gateway  - `git checkout kong-api-gateway`
+- Spring Cloud Gateway  - `git checkout spring-cloud-gateway`
 
 
 ## Getting Started ##
